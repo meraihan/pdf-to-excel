@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @Controller
 public class ConvertPdfToExcelController {
@@ -21,13 +21,9 @@ public class ConvertPdfToExcelController {
         return "home/index";
     }
 
-    @ResponseBody
     @PostMapping("/convert")
-    public String convertFile(@ModelAttribute("convertfile") ConvertFile convertFile){
-
-
-
-        return "home/index";
-
+    public String convertFile(@ModelAttribute("convertfile") ConvertFile convertFile) {
+        pdfToExcelService.convertPdfToExcel(convertFile);
+        return "redirect:/";
     }
 }
