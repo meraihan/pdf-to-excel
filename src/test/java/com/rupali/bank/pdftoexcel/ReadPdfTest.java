@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.PDFTextStripperByArea;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -19,6 +19,7 @@ import java.io.IOException;
 public class ReadPdfTest {
 
     @Test
+    @Ignore
     public void pdfReadTest(){
         try (PDDocument document = PDDocument.load(new File("./files/BSL-01.pdf"))) {
 
@@ -36,6 +37,7 @@ public class ReadPdfTest {
                 for (String line : lines) {
                     System.out.println(line);
                 }
+
             }
 
         } catch (IOException e) {
