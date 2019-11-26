@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -24,7 +22,6 @@ public class ConvertPdfToExcelService {
 
     public void convertPdfToExcel(ConvertFile convertFile){
         try (PDDocument document = PDDocument.load(convertFile.getFile().getBytes())) {
-
             document.getClass();
             if (!document.isEncrypted()) {
                 PDFTextStripperByArea stripper = new PDFTextStripperByArea();
@@ -44,19 +41,19 @@ public class ConvertPdfToExcelService {
         XSSFSheet sheet = workbook.createSheet("Blank Sheet");
         Map<String, Object[]> data = new TreeMap<String, Object[]>();
 
+        List<SampleData> sampleDataList = new ArrayList<>();
         SampleData sampleData = new SampleData();
 
-        data.put("1", new Object[] {"DATE", "RECONCILATION DATE", "TRANSACTION", "ACCOUNT", "ISSUER", "DEBIT", "CREDIT", "BALANCE"});
-        data.put("2", new Object[] {""});
+
+        data.put("1", new Object[] {"DATE", "RECONCILIATION DATE", "TRANSACTION", "ACCOUNT", "ISSUER", "DEBIT", "CREDIT", "BALANCE"});
+        data.put("2", pdfData.split("\\r?\\n"));
         Set<String> keyset = data.keySet();
         int rownum = 0;
-        for (String key : keyset)
-        {
+        for (String key : keyset) {
             Row row = sheet.createRow(rownum++);
             Object [] objArr = data.get(key);
             int cellnum = 0;
-            for (Object obj : objArr)
-            {
+            for (Object obj : objArr) {
                 Cell cell = row.createCell(cellnum++);
                 if(obj instanceof String)
                     cell.setCellValue((String)obj);
@@ -64,16 +61,14 @@ public class ConvertPdfToExcelService {
                     cell.setCellValue((Integer)obj);
             }
         }
-        try
-        {
+        try {
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(new File("GL-Ledger.xlsx"));
             workbook.write(out);
             out.close();
             System.out.println("General ledger is written successfully on disk.");
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
